@@ -1,5 +1,6 @@
 import db.ProductRepository;
 import model.Product;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,15 +16,22 @@ class ProductDataProcessorTest {
     ProductRepository repository;
 
     ProductDataProcessor productDataProcessor;
-    List<Product> products = new ArrayList<>();
+
+    List<Product> products;
 
     @BeforeEach
     void setUp() {
+        products = new ArrayList<>();
         repository = mock(ProductRepository.class);
 
         products.add(new Product("Macbook Pro 13-inch", "Apple", 1050.0));
         products.add(new Product("Thinkpad T480s", "Lenovo", 1200.0));
         products.add(new Product("XPS 13", "Dell", 1000.0));
+    }
+
+    @AfterEach
+    void tearDown() {
+        products = new ArrayList<>();
     }
 
     @Test
@@ -40,7 +48,7 @@ class ProductDataProcessorTest {
         assertThat(productsByBrand.get(0).getPrice()).isEqualTo(1200.0);
 
         //TODO Task 1:
-        // Using Mockito, check if correct method from the db.ProductRepository has been invoked
+        // Using Mockito, check if correct method from the repository has been invoked
 
     }
 
