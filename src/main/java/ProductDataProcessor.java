@@ -1,3 +1,4 @@
+import db.ProductRepository;
 import exception.ProductDataException;
 import model.Product;
 
@@ -13,6 +14,12 @@ public class ProductDataProcessor {
         this.productRepository = productRepository;
     }
 
+    /**
+     * Fetch all products having the given brand
+     *
+     * @param brand to filter the products
+     * @return List of products
+     */
     public List<Product> collectAllProductsPerBrand(final String brand) {
         List<Product> allProductsList = productRepository.getAllProducts();
         return allProductsList.stream()
@@ -20,6 +27,12 @@ public class ProductDataProcessor {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Change all prices by applying a discount
+     *
+     * @param percent percentage of the discount
+     * @throws ProductDataException if the discount is too small or too large
+     */
     public void applyDiscountToAllProducts(final int percent) throws ProductDataException {
         if (percent > 99 || percent < 1) {
             throw new ProductDataException(INVALID_DISCOUNT_MESSAGE);
@@ -31,6 +44,15 @@ public class ProductDataProcessor {
         });
 
         productRepository.updateProducts(productList);
+    }
+
+    /**
+     * Delete given products
+     *
+     * @param products to be deleted
+     */
+    public void deleteProducts(final List<Product> products) {
+        products.forEach(product -> productRepository.deleteProduct(product));
     }
 
     private double calculateDiscountedPrice(final Product product, final int percent) {
